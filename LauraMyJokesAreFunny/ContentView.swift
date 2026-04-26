@@ -1,35 +1,42 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selectedScore = 0
+    @State private var selectedScore = 5
+
+    private static let scoreRange = 0...10
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 Section {
                     Picker("Select Score", selection: $selectedScore) {
-                        ForEach(0..<11) { score in
+                        ForEach(Self.scoreRange, id: \.self) { score in
                             Text("\(score)").tag(score)
                         }
                     }
-                    .pickerStyle(WheelPickerStyle())
+                    .pickerStyle(.wheel)
                 }
-                
+
                 Section {
-                    NavigationLink(destination: FullScreenScoreView(score: selectedScore)) {
+                    NavigationLink {
+                        FullScreenScoreView(score: selectedScore)
+                    } label: {
                         Text("Show Full Screen")
                     }
                 }
-                
-                // Adding a new section for the message
+
                 Section {
                     Text("Laura, my jokes might be a 5/10 but you... you're a 10/10")
-                        .font(.subheadline) // Customize the font to your liking
-                        .foregroundColor(.black) // Change the color if you like
-                        .multilineTextAlignment(.center) // Center the text
+                        .font(.subheadline)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
                 }
             }
-            .navigationBarTitle("ScoreCard")
+            .navigationTitle("ScoreCard")
         }
     }
+}
+
+#Preview {
+    ContentView()
 }
